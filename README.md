@@ -1,4 +1,4 @@
-HaltoRouter
+HaltoRouter ![build status](https://travis-ci.org/smrtr/HaltoRouter.png)
 ===========
 
 HaltoRouter is a small but powerful routing class for PHP 5.3+. HaltoRouter is a hard fork of
