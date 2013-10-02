@@ -26,7 +26,7 @@ $router->addHostname('private.example.com', 'private');
 // map routes
 $router->map('GET', '/hello-world', 'Index@helloWorld', 'intro', 'public');
 $router->map('GET|POST', '/settings', 'Settings@index', 'settings', 'private');
-$router->map('GET|POST', '/user/[i:id]/[delete|update:action], 'Users', 'modify_user', 'private');
+$router->map('GET|POST', '/user/[i:id]/[delete|update:action]', 'Users', 'modify_user', 'private');
 
 // generate url
 $router->generate('modify_user', array('id'=>5, 'action'=>'delete'));
