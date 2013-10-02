@@ -259,26 +259,6 @@ class HaltoRouter
     }
 
     /**
-     * @param HttpRequestInterface $request
-     *
-     * @return array
-     */
-    protected function getRequestInfo(HttpRequestInterface $request)
-    {
-        return array($request->getPathInfo(), $request->getMethod(), $request->getHttpHost(true));
-    }
-
-    // ==============
-    ####################################################################################################################
-    ####################################################################################################################
-    ####################################################################################################################
-    ####################################################################################################################
-    ####################################################################################################################
-    ####################################################################################################################
-    ####################################################################################################################
-    // ==============
-
-    /**
      * Reversed routing
      *
      * Generate the URL for a named route. Replace regexes with supplied parameters.
@@ -292,36 +272,36 @@ class HaltoRouter
      *
      * @throws HaltoRouterException
      */
-	public function generate($routeName, array $params = array(), $hostname = null, $protocol = '//')
+    public function generate($routeName, array $params = array(), $hostname = null, $protocol = '//')
     {
-		// Check if named route exists
-		if(!isset($this->namedRoutes[$routeName])) {
-			throw new HaltoRouterException("Route '{$routeName}' does not exist.");
-		}
+        // Check if named route exists
+        if(!isset($this->namedRoutes[$routeName])) {
+            throw new HaltoRouterException("Route '{$routeName}' does not exist.");
+        }
 
-		// Replace named parameters
+        // Replace named parameters
         $hostGroup = $this->namedRoutes[$routeName][1];
-		$route = $this->namedRoutes[$routeName][0];
-		$url = $route;
+        $route = $this->namedRoutes[$routeName][0];
+        $url = $route;
 
-		if (preg_match_all('`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`', $route, $matches, PREG_SET_ORDER)) {
+        if (preg_match_all('`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`', $route, $matches, PREG_SET_ORDER)) {
 
-			foreach($matches as $match) {
-				list($block, $pre, $type, $param, $optional) = $match;
+            foreach($matches as $match) {
+                list($block, $pre, $type, $param, $optional) = $match;
 
-				if ($pre) {
-					$block = substr($block, 1);
-				}
+                if ($pre) {
+                    $block = substr($block, 1);
+                }
 
-				if(isset($params[$param])) {
-					$url = str_replace($block, $params[$param], $url);
-				} elseif ($optional) {
-					$url = str_replace($pre . $block, '', $url);
-				}
-			}
+                if(isset($params[$param])) {
+                    $url = str_replace($block, $params[$param], $url);
+                } elseif ($optional) {
+                    $url = str_replace($pre . $block, '', $url);
+                }
+            }
 
 
-		}
+        }
 
         // Try to include the hostname and protocol
         $hasHostPart = false;
@@ -343,47 +323,48 @@ class HaltoRouter
             $url = $protocol . $url;
         }
 
-		return $url;
-	}
+        return $url;
+    }
 
-	/**
-	 * Compile the regex for a given route (EXPENSIVE)
-	 */
-	private function compileRoute($route) {
-		if (preg_match_all('`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`', $route, $matches, PREG_SET_ORDER)) {
+    /**
+     * Compile the regex for a given route
+     */
+    private function compileRoute($route)
+    {
+        if (preg_match_all('`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`', $route, $matches, PREG_SET_ORDER)) {
 
-			$match_types = array(
-				'i'  => '[0-9]++',
-				'a'  => '[0-9A-Za-z]++',
-				'h'  => '[0-9A-Fa-f]++',
-				'*'  => '.+?',
-				'**' => '.++',
-				''   => '[^/\.]++'
-			);
+            $match_types = array(
+                'i'  => '[0-9]++',
+                'a'  => '[0-9A-Za-z]++',
+                'h'  => '[0-9A-Fa-f]++',
+                '*'  => '.+?',
+                '**' => '.++',
+                ''   => '[^/\.]++'
+            );
 
-			foreach ($matches as $match) {
-				list($block, $pre, $type, $param, $optional) = $match;
+            foreach ($matches as $match) {
+                list($block, $pre, $type, $param, $optional) = $match;
 
-				if (isset($match_types[$type])) {
-					$type = $match_types[$type];
-				}
-				if ($pre === '.') {
-					$pre = '\.';
-				}
+                if (isset($match_types[$type])) {
+                    $type = $match_types[$type];
+                }
+                if ($pre === '.') {
+                    $pre = '\.';
+                }
 
-				//Older versions of PCRE require the 'P' in (?P<named>)
-				$pattern = '(?:'
-						. ($pre !== '' ? $pre : null)
-						. '('
-						. ($param !== '' ? "?P<$param>" : null)
-						. $type
-						. '))'
-						. ($optional !== '' ? '?' : null);
+                //Older versions of PCRE require the 'P' in (?P<named>)
+                $pattern = '(?:'
+                        . ($pre !== '' ? $pre : null)
+                        . '('
+                        . ($param !== '' ? "?P<$param>" : null)
+                        . $type
+                        . '))'
+                        . ($optional !== '' ? '?' : null);
 
-				$route = str_replace($block, $pattern, $route);
-			}
+                $route = str_replace($block, $pattern, $route);
+            }
 
-		}
-		return "`^$route$`";
-	}
+        }
+        return "`^$route$`";
+    }
 }
