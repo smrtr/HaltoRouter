@@ -1,24 +1,6 @@
 <?php
 
-class HaltoRouterDebug extends Smrtr\HaltoRouter{
-	
-	public function getNamedRoutes(){
-		return $this->namedRoutes;
-	}
-	
-	public function getRoutes(){
-		return $this->routes;
-	}
-	
-	public function getBasePath(){
-		return $this->basePath;
-	}
-
-    public function getHostGroups()
-    {
-        return $this->httpHostGroups;
-    }
-}
+use Smrtr\HaltoRouter;
 
 class HaltoRouterTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,7 +15,7 @@ class HaltoRouterTest extends \PHPUnit_Framework_TestCase
 	 */
 	protected function setUp()
 	{
-		$this->router = new HaltoRouterDebug;
+		$this->router = new HaltoRouter;
 	}
 
     /**

@@ -96,6 +96,14 @@ class HaltoRouter
     }
 
     /**
+     * @return array
+     */
+    public function getHostgroups()
+    {
+        return $this->httpHostGroups;
+    }
+
+    /**
      * Add a route mapping to the router.
      *
      * @param string $method One, or a pipe-separated list, of Http Methods (GET|POST|PUT|DELETE)
@@ -131,6 +139,22 @@ class HaltoRouter
         }
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRoutes()
+    {
+        return $this->routes;
+    }
+
+    /**
+     * @return array
+     */
+    public function getNamedRoutes()
+    {
+        return $this->namedRoutes;
     }
 
     /**
