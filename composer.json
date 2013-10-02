@@ -3,6 +3,7 @@
     "description": "A lightning fast router for PHP",
     "keywords": ["router", "routing", "lightweight", "hostgroups"],
     "homepage": "https://github.com/smrtr/HaltoRouter",
+    "license": "MIT",
     "authors": [
         {
             "name": "Joe Green",
