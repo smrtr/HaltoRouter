@@ -16,20 +16,21 @@ and new hostgroup matching functionality built in.
  2. Setup URL rewriting so that all requests go through a single php file
  3. Create an instance of Smrtr\HaltoRouter, add your hostgroups, map your routes and match the request.
 
-    <?php
-    $router = new \Smrtr\HaltoRouter;
+```php
+$router = new \Smrtr\HaltoRouter;
 
-    // add hostgroups
-    $router->addHostnames(array('www.example.com', 'public.example.com', 'example.com'), 'public');
-    $router->addHostname('private.example.com', 'private');
+// add hostgroups
+$router->addHostnames(array('www.example.com', 'public.example.com', 'example.com'), 'public');
+$router->addHostname('private.example.com', 'private');
 
-    // map routes
-    $router->map('GET', '/hello-world', 'Index@helloWorld', 'intro', 'public');
-    $router->map('GET|POST', '/settings', 'Settings@index', 'settings', 'private');
-    $router->map('GET|POST', '/user/[i:id]/[delete|update:action], 'Users', 'modify_user', 'private');
+// map routes
+$router->map('GET', '/hello-world', 'Index@helloWorld', 'intro', 'public');
+$router->map('GET|POST', '/settings', 'Settings@index', 'settings', 'private');
+$router->map('GET|POST', '/user/[i:id]/[delete|update:action], 'Users', 'modify_user', 'private');
 
-    // generate url
-    $router->generate('modify_user', array('id'=>5, 'action'=>'delete'));
+// generate url
+$router->generate('modify_user', array('id'=>5, 'action'=>'delete'));
+```
 
 You can use the following limits on your named parameters. HaltoRouter will create the correct regexes.
 ```php
@@ -44,11 +45,12 @@ You can use the following limits on your named parameters. HaltoRouter will crea
     [*:trailing]         // Catch all as 'trailing' (lazy)
     [**:trailing]        // Catch all (possessive - will match the rest of the URI)
     .[:format]?          // Match an optional parameter 'format' - a / or . before the block is also optional
+```
 
 Some more complicated examples
 
+```php
     /posts/[*:title][i:id]     // Matches "/posts/this-is-a-title-123"
     /output.[xml|json:format]? // Matches "/output", "output.xml", "output.json"
     /[:controller]?/[:action]? // Matches the typical /controller/action format
-
 ```
