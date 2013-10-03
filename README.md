@@ -54,3 +54,5 @@ Some more complicated examples
  /output.[xml|json:format]? // Matches "/output", "output.xml", "output.json"
  /[:controller]?/[:action]? // Matches the typical /controller/action format
 ```
+
+There are more usage examples in the tests.
