@@ -119,7 +119,6 @@ class HaltoRouter
      */
     public function map($method, $route, $target, $name = null, $hostGroup = null, $prepend = false)
     {
-        $route = rtrim($route, '/');
         if (!$hostGroup) {
             $hostGroup = null;
         }
