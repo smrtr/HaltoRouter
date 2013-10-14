@@ -30,6 +30,7 @@ $router->map('GET|POST', '/user/[i:id]/[delete|update:action]', 'Users', 'modify
 
 // generate url
 $router->generate('modify_user', array('id'=>5, 'action'=>'delete'));
+$router->generate('intro', [], 'public.example.com', 'https://');
 ```
 
 You can use the following limits on your named parameters. HaltoRouter will create the correct regexes.
