@@ -290,12 +290,13 @@ class HaltoRouter
      * @param array  $params Associative array of parameters to replace placeholders with.
      * @param string $hostname Optional; specify a valid hostname or one will be detected automatically if possible.
      * @param string $protocol Specify a protocol including "://" if you wish
+     * @param int    $port Optional; specify a port to use in the generated URL
      *
      * @return string The URL of the route with named parameters in place.
      *
      * @throws HaltoRouterException
      */
-    public function generate($routeName, array $params = array(), $hostname = null, $protocol = '//')
+    public function generate($routeName, array $params = array(), $hostname = null, $protocol = '//', $port = null)
     {
         // Check if named route exists
         if(!isset($this->namedRoutes[$routeName])) {
@@ -331,15 +332,18 @@ class HaltoRouter
         if (is_string($hostGroup) && array_key_exists($hostGroup, $this->httpHostGroups)) {
 
             $hasHostPart = true;
+
             if (is_string($hostname) && in_array($hostname, $this->httpHostGroups[$hostGroup])) {
-
-                $url = rtrim($hostname, '/') . '/' . ltrim($url, '/');
-
+                $hostPart = rtrim($hostname, '/');
             } else {
-
-                $url = $this->httpHostGroups[$hostGroup][0] . '/' . ltrim($url, '/');
-
+                $hostPart = $this->httpHostGroups[$hostGroup][0];
             }
+
+            if (is_int($port)) {
+                $hostPart .= ':' . $port;
+            }
+
+            $url = $hostPart . '/' . ltrim($url, '/');
         }
 
         if ($hasHostPart) {

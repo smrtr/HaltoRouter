@@ -219,6 +219,52 @@ class HaltoRouterTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Smrtr\HaltoRouter::generate
      */
+    public function testGenerateWithExplicitHostnameAndProtocolAndPort()
+    {
+        $method = 'GET|POST';
+        $route = '/[:controller]/[:action]';
+        $target = function(){};
+        $name = 'myroute';
+        $hostGroup = 'example website';
+
+        $this->router->addHostname('www.example.com', $hostGroup);
+        $this->router->addHostname('public.example.com', $hostGroup);
+        $this->router->map($method, $route, $target, $name, $hostGroup);
+
+        $params = array('controller'=>'foo', 'action'=>'bar');
+
+        $this->assertSame(
+            'http://public.example.com:8080/foo/bar',
+            $this->router->generate($name, $params, 'public.example.com', 'http://', 8080)
+        );
+    }
+
+    /**
+     * @covers Smrtr\HaltoRouter::generate
+     */
+    public function testGenerateWithExplicitProtocolAndPort()
+    {
+        $method = 'GET|POST';
+        $route = '/[:controller]/[:action]';
+        $target = function(){};
+        $name = 'myroute';
+        $hostGroup = 'example website';
+
+        $this->router->addHostname('www.example.com', $hostGroup);
+        $this->router->addHostname('public.example.com', $hostGroup);
+        $this->router->map($method, $route, $target, $name, $hostGroup);
+
+        $params = array('controller'=>'foo', 'action'=>'bar');
+
+        $this->assertSame(
+            'http://www.example.com:8080/foo/bar',
+            $this->router->generate($name, $params, null, 'http://', 8080)
+        );
+    }
+
+    /**
+     * @covers Smrtr\HaltoRouter::generate
+     */
     public function testGenerateWithInvalidHostname()
     {
         $method = 'GET|POST';
