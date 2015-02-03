@@ -162,10 +162,11 @@ class HaltoRouter
      * @param string $requestUrl
      * @param string $requestMethod
      * @param string $requestHost
+     * @param bool   $looseMatching
      *
      * @return array|boolean Array with route information on success, false on failure (no match).
      */
-    public function match($requestUrl, $requestMethod, $requestHost)
+    public function match($requestUrl, $requestMethod, $requestHost, $looseMatching = false)
     {
         $params = array();
         $validGroups = $this->getValidHostGroups($requestHost);
@@ -190,6 +191,20 @@ class HaltoRouter
             if (!$method_match) {
                 continue;
             }
+
+            if ($looseMatching) {
+                if (substr($_route, -1) === '$') {
+                   if (substr($_route, strlen($_route) - 2, 1) === '/') {
+                       $_route = sprintf('%s?$', substr($_route, 0, strlen($_route) - 1));
+                   } elseif (substr($_route, -2) !== '/?') {
+                       $_route = sprintf('%s/?$', substr($_route, 0, strlen($_route) - 1));
+                   }
+                } elseif (substr($_route, -1) === '/') {
+                    $_route = sprintf('%s?', $_route);
+                } elseif (substr($_route, -2) !== '/?') {
+                    $_route = sprintf('%s/?', $_route);
+                }
+            } 
 
             if ($_route === '*') {
                 $match = true;
