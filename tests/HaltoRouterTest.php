@@ -302,6 +302,23 @@ class HaltoRouterTest extends \PHPUnit_Framework_TestCase
 		$this->assertFalse($this->router->match('/foo/test/do', 'POST', 'www.example.com'));
 	}
 
+       /**
+        * @covers Smrtr\HaltoRouter::match
+        * @covers Smrtr\HaltoRouter::compileRoute
+        */
+       public function testLooseMatching()
+       {
+           $this->router->map('GET', '/foo/[:controller]/[:action]', 'foo_action', 'foo_route');
+
+           $this->assertSame(array(
+               'target' => 'Test@do',
+               'params' => array(),
+               'name' => 'foo_route'
+           ), $this->router->match('/foo/test/do/', 'GET', 'www.example.com', true));
+
+           $this->assertFalse($this->router->match('/foo/test/do/', 'POST', 'www.example.com'));
+       } 
+
     /**
      * @covers Smrtr\HaltoRouter::match
      * @covers Smrtr\HaltoRouter::compileRoute
