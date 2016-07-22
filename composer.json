@@ -1,6 +1,6 @@
 {
     "name": "smrtr/haltorouter",
-    "description": "A lightning fast router for PHP",
+    "description": "A lightning fast HTTP router for PHP",
     "keywords": ["router", "routing", "lightweight", "hostgroups"],
     "homepage": "https://github.com/smrtr/HaltoRouter",
     "license": "MIT",
